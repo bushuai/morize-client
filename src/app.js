@@ -1,3 +1,4 @@
+import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index/index'
 
@@ -14,7 +15,8 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'MORIZE',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      onReachBottomDistance: 20
     }
   }
 
