@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button } from '@tarojs/components'
-import './index.scss'
+import { View } from '@tarojs/components'
+import './about.scss'
 
 export default class Index extends Component {
   config = {

@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Map, Progress } from '@tarojs/components'
 import { CATEGORIES } from '../../CONSTANT'
-import { fetchRecent, fetchAll } from '../../services/articles'
+import { fetchAll } from '../../services/articleService'
 import itemImage from '../../assets/item-image.jpg'
 import Share from '../../assets/icons/share-fat.svg'
 import './index.scss'
@@ -9,7 +9,7 @@ import './index.scss'
 export default class Index extends Component {
   config = {
     navigationBarTitleText: 'MORIZE',
-    enablePullDownRefresh: true,
+    // enablePullDownRefresh: true,
     backgroundTextStyle: 'dark'
   }
 
@@ -17,22 +17,80 @@ export default class Index extends Component {
     super(props)
     this.state = {
       activeMenu: CATEGORIES.RECENT,
-      recentItems: [],
-      allItems: []
+      latest: null,
+      pastArticles: [],
+      location: null,
+      polyline: [{
+        points: [
+          { longitude: 113.503147, latitude: 23.161879 },
+          { longitude: 113.75151, latitude: 23.031035 },
+          { longitude: 114.060815, latitude: 22.552317 },
+          { longitude: 114.348273, latitude: 22.712434 },
+          { longitude: 114.427611, latitude: 23.105515 },
+          { longitude: 115.649881, latitude: 22.921369 },
+          { longitude: 116.693928, latitude: 23.358432 },
+          { longitude: 116.618039, latitude: 23.66595 },
+          { longitude: 117.659786, latitude: 24.514678 },
+          { longitude: 118.131217, latitude: 24.495739 },
+          { longitude: 118.675087, latitude: 24.880786 },
+          { longitude: 119.016587, latitude: 25.441727 },
+          { longitude: 119.310944, latitude: 26.073796 },
+          { longitude: 119.551258, latitude: 26.673513 },
+          { longitude: 120.718337, latitude: 27.992328 },
+          { longitude: 121.438131, latitude: 28.655743 },
+          { longitude: 121.428932, latitude: 28.651686 },
+          { longitude: 121.617505, latitude: 29.8697 },
+          { longitude: 120.584956, latitude: 30.043928 },
+          { longitude: 120.22161, latitude: 30.261778 }
+        ],
+        color: "#2a91e0",
+        width: 4,
+        dottedLine: false,
+        arrowLine: false,
+        borderWidth:5
+      }],
+      markers: [{
+        id: 1,
+        longitude: 113.503147,
+        latitude: 23.161879,
+        width: 16,
+        height: 16,
+        iconPath: '/assets/icons/start.png'
+      },
+      {
+        id: 2,
+        longitude: 120.22161,
+        latitude: 30.261778,
+        width: 16,
+        height: 16,
+        iconPath: '/assets/icons/end.png'
+      },
+      {
+        id: 3,
+        longitude: 116.693928,
+        latitude: 23.358432,
+        callout: {
+          content: '我在这里',
+          color:  '#000000',
+          fontSize: 12,
+          borderRadius: 3,
+          bgColor : '#ffffff',
+          padding:  5,
+          display:  'ALWAYS',
+          textAlign: 'center'
+        }
+      }
+    ]
     }
   }
 
   componentWillMount () { }
 
-  componentDidMount () { 
-    fetchRecent()
-    .then(response => {
-      console.log('response: ', response)
-      this.setState({
-        recentItems: response
-      })
-    })
-    .catch(error => console.log(error))
+  async componentDidMount () {
+    this.mapCtx = Taro.createMapContext('map', this)
+    const [ location, articles ] = await Promise.all([ Taro.getLocation(), fetchAll() ])
+    const { pastArticles, latest } = articles
+    this.setState({ location, pastArticles, latest })
   }
 
   componentWillUnmount () { }
@@ -41,30 +99,17 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
-  onPullDownRefresh () {
-    Taro.showNavigationBarLoading()
-
-    setTimeout(() => {
-      Taro.hideNavigationBarLoading()
-      Taro.stopPullDownRefresh()
-    }, 2000)
-  }
-
   onReachBottom () {
-    if (this.state.activeMenu === CATEGORIES.RECENT) {
-      return
-    }
-
-    const items = this.state.allItems.slice(0)
     Taro.showLoading({
+      mask: true,
       title: 'loading...',
-      icon: 'loading'
     })
-    Taro.showNavigationBarLoading()
 
+    Taro.showNavigationBarLoading()
     setTimeout(() => {
+      const items = this.state.pastArticles.slice(0)
       this.setState({
-        allItems: [ ...items, ...this.state.allItems ]
+        pastArticles: [ ...items, ...this.state.pastArticles ]
       })
       Taro.hideLoading()
       Taro.hideNavigationBarLoading()
@@ -82,7 +127,7 @@ export default class Index extends Component {
     const { articleId } = event.currentTarget.dataset
 
     Taro.showActionSheet({
-      itemList: ['转发给朋友', '生成图片', '复制链接'],
+      itemList: ['分享给朋友', '生成图文'],
       success (response) {
         console.log(response)
       },
@@ -90,86 +135,143 @@ export default class Index extends Component {
     })
   }
 
-  toggleMenuActive = event => {
+  toggleMenu = async (event) => {
     const { menu: activeMenu } = event.currentTarget.dataset
     this.setState({ activeMenu })
 
     if (activeMenu === CATEGORIES.ALL) {
-      fetchAll()
-      .then(allItems => {
-        this.setState({ allItems })
-      })  
-      .catch(error => console.log(error))
+      const { latest, pastArticles } = await fetchAll()
+      this.setState({ latest, pastArticles })
     }
   }
 
+  chooseLocation = async () => {
+    const location = await Taro.chooseLocation()
+    this.translateMarker(location)
+  }
+
+  getCenterLocation = async () => {
+    const location = await this.mapCtx.getCenterLocation()
+    console.log(location.longitude)
+    console.log(location.latitude)
+  }
+
+  moveToLocation = () => {
+    this.mapCtx.moveToLocation()
+  }
+
+  translateMarker = () => {
+    this.mapCtx.translateMarker({
+      markerId: 0,
+      autoRotate: true,
+      duration: 5000,
+      destination: {
+        latitude: 109.622629,
+        longitude: 36.682028
+      },
+      animationEnd() {
+        console.log('animation end')
+      }
+    })
+  }
+
+  includePoints = () => {
+    this.mapCtx.includePoints({
+      padding: [10],
+      points: [
+        { longitude: 113.503147, latitude: 23.161879 },
+        { longitude: 113.75151, latitude: 23.031035 },
+        { longitude: 114.060815, latitude: 22.552317 },
+        { longitude: 114.348273, latitude: 22.712434 },
+        { longitude: 114.427611, latitude: 23.105515 },
+        { longitude: 115.649881, latitude: 22.921369 },
+        { longitude: 116.693928, latitude: 23.358432 },
+        { longitude: 116.618039, latitude: 23.66595 },
+        { longitude: 117.659786, latitude: 24.514678 },
+        { longitude: 118.131217, latitude: 24.495739 },
+        { longitude: 118.675087, latitude: 24.880786 },
+        { longitude: 119.016587, latitude: 25.441727 },
+        { longitude: 119.310944, latitude: 26.073796 },
+        { longitude: 119.551258, latitude: 26.673513 },
+        { longitude: 120.718337, latitude: 27.992328 },
+        { longitude: 121.438131, latitude: 28.655743 },
+        { longitude: 121.428932, latitude: 28.651686 },
+        { longitude: 121.617505, latitude: 29.8697 },
+        { longitude: 120.584956, latitude: 30.043928 },
+        { longitude: 120.22161, latitude: 30.261778 }
+      ]
+    })
+  }
+
+  showBikingRoute = () => {
+    this.includePoints()
+  }
+
+  showCurrentLocation = () => {
+    this.mapCtx.moveToLocation({
+      latitude: 23.10229,
+      longitude: 113.3345211
+    })
+  }
+
   render () {
-    const { activeMenu } = this.state
+    const {
+      activeMenu,
+      location,
+      polyline,
+      markers,
+      latest
+    } = this.state
+
     return (
       <View className='index'>
-        {/* <View className='index__title'>
-        </View> */}
-        {/* <View className='index__subtitle'>FOR THOSE WHO LOVE THE WORLD</View> */}
-        <View className='index__menu'>
-          <View 
-            className={`index__menu-item ${activeMenu === CATEGORIES.RECENT ? 'index__menu-item--active' : ''}`}
-            data-menu={CATEGORIES.RECENT}
-            onClick={this.toggleMenuActive}
-          >Recent</View>
-            
-          <View 
-            className={`index__menu-item ${activeMenu === CATEGORIES.ALL ? 'index__menu-item--active' : ''}`}
-            data-menu={CATEGORIES.ALL}
-            onClick={this.toggleMenuActive}
-          >All</View>
+        {
+          location &&
+          <View className='track'>
+            <Map
+              id='map'
+              longitude='113.517988'
+              latitude='23.159165'
+              scale='5'
+              markers={this.state.markers}
+              polyline={this.state.polyline}
+              style='width: 100%; height: 100%;'
+            />
+          <Progress percent={80}  strokeWidth={4} active backgroundColor='#ffffff' activeColor='#008cff' />
         </View>
+        }
         <View className='index__item-list'>
         {
-          activeMenu === CATEGORIES.RECENT && this.state.recentItems.map(item => {
-            return (
-              <View 
-                className='index__item' 
-                key={item.id} 
-                hoverClass='index__item--hover'
-                data-article-id={item.id}
-                onClick={this.viewArticle}
-              >
-                <Image className='index__item-image' src={itemImage}></Image>
-                <View className='index__item-meta'>
-                  <View className='index__item-title'>{item.title}</View>
-                  {/* <View className='index__item-star'>start</View> */}
-                  {/* <View className='index__item-like'>like</View> */}
-                  <Image className='index__item-share' data-article-id={item.id} onClick={this.shareArticle} src={Share}></Image>
-                  <View className='index__item-summary'>{item.summary}</View>
-                </View>
-                {/* <View className='index__item-date'>{item.date}</View> */}
+          latest &&
+            <View
+              className='index__item'
+              key={latest.id}
+              hoverClass='index__item--hover'
+              data-article-id={latest.id}
+              onClick={this.viewArticle}
+            >
+              <Image className='index__item-image' src={itemImage}></Image>
+              <View className='index__item-meta'>
+                <View className='index__item-title'>{latest.title}</View>
+                <View className='index__item-summary'>{latest.summary}</View>
               </View>
-            )
-          })
+            </View>
         }
+        <View className='index__more'>View more from below</View>
         {
-          activeMenu === CATEGORIES.ALL && this.state.allItems.map(item => {
+          this.state.pastArticles.map(item => {
             return (
               <View className='index__item index__item--simple' key={item.id} hoverClass='index__item--hover'>
                 <View className='index__item-meta'>
                   <View className='index__item-title'>{item.title}111</View>
-                  {/* <View className='index__item-star'>start</View> */}
-                  {/* <View className='index__item-like'>like</View> */}
-                  <View className='index__item-share'>share111</View>
+                  {/* <View className='index__item-share'><Image src={Share} /> </View> */}
                   <View className='index__item-summary'>{item.summary}111</View>
                 </View>
-                {/* <View className='index__item-date'>{item.date}</View> */}
               </View>
             )
           })
         }
         </View>
-        {/* <View className='toolbar'>
-          <View className='toolbar__item'>icon</View>
-          <View className='toolbar__item'>icon</View>
-          <View className='toolbar__item'>icon</View>
-        </View> */}
-        {/* <Button className='index-btn'>开始你的故事</Button> */}
         <View className='copyright'>created by bushuai-lab.cn</View>
       </View>
     )
