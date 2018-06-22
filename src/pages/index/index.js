@@ -1,9 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Map, Progress } from '@tarojs/components'
+import { View, Image, Map, Progress, Button } from '@tarojs/components'
 import { CATEGORIES } from '../../CONSTANT'
 import { fetchAll } from '../../services/articleService'
+import { DB } from '../../services/leancloudService'
 import itemImage from '../../assets/item-image.jpg'
-import Share from '../../assets/icons/share-fat.svg'
+import hidden from '../../assets/icons/hidden.png'
 import './index.scss'
 
 export default class Index extends Component {
@@ -41,7 +42,19 @@ export default class Index extends Component {
           { longitude: 121.428932, latitude: 28.651686 },
           { longitude: 121.617505, latitude: 29.8697 },
           { longitude: 120.584956, latitude: 30.043928 },
-          { longitude: 120.22161, latitude: 30.261778 }
+          { longitude: 120.22161, latitude: 30.261778 },
+          { longitude: 121.472149, latitude: 31.238279 },
+          { longitude: 120.589079, latitude: 31.30544 },
+          { longitude: 119.977369, latitude: 31.813499 },
+          { longitude: 118.799942, latitude: 32.068436 },
+          { longitude: 119.430049, latitude: 32.408538 },
+          { longitude: 119.029908, latitude: 33.621416 },
+          { longitude: 119.21848, latitude: 34.6008 },
+          { longitude: 118.353807, latitude: 35.120201 },
+          { longitude: 120.391308, latitude: 36.081845 },
+          { longitude: 120.391308, latitude: 36.081845 },
+          { longitude: 120.391308, latitude: 36.081845 }
+
         ],
         color: "#2a91e0",
         width: 4,
@@ -53,17 +66,17 @@ export default class Index extends Component {
         id: 1,
         longitude: 113.503147,
         latitude: 23.161879,
-        width: 16,
-        height: 16,
-        iconPath: '/assets/icons/start.png'
+        width: 18,
+        height: 18,
+        iconPath: '/assets/icons/hidden.png'
       },
       {
         id: 2,
-        longitude: 120.22161,
-        latitude: 30.261778,
-        width: 16,
-        height: 16,
-        iconPath: '/assets/icons/end.png'
+        longitude: 120.391308,
+        latitude: 36.081845,
+        width: 18,
+        height: 18,
+        iconPath: '/assets/icons/end-2.png'
       },
       {
         id: 3,
@@ -72,7 +85,6 @@ export default class Index extends Component {
         callout: {
           content: '我在这里',
           color:  '#000000',
-          fontSize: 12,
           borderRadius: 3,
           bgColor : '#ffffff',
           padding:  5,
@@ -88,7 +100,8 @@ export default class Index extends Component {
 
   async componentDidMount () {
     this.mapCtx = Taro.createMapContext('map', this)
-    const [ location, articles ] = await Promise.all([ Taro.getLocation(), fetchAll() ])
+    const actions = [ Taro.getLocation(), fetchAll() ]
+    const [ location, articles ] = await Promise.all(actions)
     const { pastArticles, latest } = articles
     this.setState({ location, pastArticles, latest })
   }
@@ -214,6 +227,12 @@ export default class Index extends Component {
     })
   }
 
+  saveUserInfo = async userData => {
+    console.log('saveUserInfo')
+    const response = await DB.save(userData.detail)
+    console.log('存储成功: ', response)
+  }
+
   render () {
     const {
       activeMenu,
@@ -233,13 +252,17 @@ export default class Index extends Component {
               longitude='113.517988'
               latitude='23.159165'
               scale='5'
+              show-location
               markers={this.state.markers}
               polyline={this.state.polyline}
               style='width: 100%; height: 100%;'
             />
-          <Progress percent={80}  strokeWidth={4} active backgroundColor='#ffffff' activeColor='#008cff' />
+          <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
         </View>
         }
+
+        <Button openType='getUserInfo' bindgetuserinfo={this.saveUserInfo}>Test</Button>
+
         <View className='index__item-list'>
         {
           latest &&

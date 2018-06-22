@@ -1,7 +1,8 @@
 import QQMAP from '../libs/qqmap-wx-jssdk'
+import { QQMAP_KEY } from '../constants/KEYS.js'
 
 const QQMapSDK = new QQMAP({
-  key: ''
+  key: QQMAP_KEY
 })
 
 export const search = (params, callback) => {

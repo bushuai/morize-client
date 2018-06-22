@@ -1,15 +1,14 @@
 import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index/index'
-
 import './app.scss'
 
 class App extends Component {
   config = {
     pages: [
       'pages/index/index',
-      'pages/about/about',
-      'pages/article/article'
+      'pages/article/article',
+      'pages/about/about'
     ],
     window: {
       backgroundTextStyle: 'light',
