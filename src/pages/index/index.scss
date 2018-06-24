@@ -16,6 +16,15 @@
     }
   }
 
+  &__latest {
+    font-size: 24PX;
+    color: #000;
+    font-weight: bold;
+    margin-left: 50px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px #bbb;
+  }
+
   &__more{
     text-align: center;
     margin: 50px;
@@ -95,7 +104,7 @@
   }
 
   &__item-title {
-    font-size: 16PX;
+    font-size: 18PX;
     overflow: hidden;
     width: 90%;
     white-space: nowrap;

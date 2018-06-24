@@ -8,14 +8,15 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/article/article',
-      'pages/about/about'
+      'pages/about/about',
+      'pages/admin/admin'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'MORIZE',
       navigationBarTextStyle: 'black',
-      onReachBottomDistance: 20
+      onReachBottomDistance: 0
     }
   }
 

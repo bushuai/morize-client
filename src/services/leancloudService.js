@@ -17,5 +17,3 @@ export {
   Realtime,
   TextMessage
 }
-
-export default AV

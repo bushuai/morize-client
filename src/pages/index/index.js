@@ -2,7 +2,11 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Map, Progress, Button } from '@tarojs/components'
 import { CATEGORIES } from '../../CONSTANT'
 import { fetchAll } from '../../services/articleService'
-import { DB } from '../../services/leancloudService'
+import { DB, Query } from '../../services/leancloudService'
+import AV from '../../libs/av-weapp'
+import Article from '../../models/Article'
+import Comment from '../../models/Comment'
+import Tag from '../../models/Tag'
 import itemImage from '../../assets/item-image.jpg'
 import hidden from '../../assets/icons/hidden.png'
 import './index.scss'
@@ -129,6 +133,25 @@ export default class Index extends Component {
     }, 2000)
   }
 
+  saveArticle = async () => {
+    const article = new Article({
+      title: `tset title ${Math.random()*10}`,
+      subtitle: `test subtitle ${Math.random()*10}`,
+      content: `
+      <h1>Amet ullamco duis exercitation fugiat sint sunt incididunt id excepteur aliquip.</h1>
+      <p>
+        Quis excepteur consequat sint sunt. 
+        Commodo cupidatat ea laboris reprehenderit minim in et Lorem aute proident laboris exercitation. 
+        Ex dolore ullamco enim officia sint esse adipisicing sunt quis eu qui excepteur officia.
+        Minim incididunt enim officia consectetur elit ipsum irure aute fugiat qui.
+      </p>`,
+      subtitle: 'Ea dolore exercitation aliqua anim fugiat est laboris fugiat elit id culpa in.',
+    })
+
+    const newArticle = await article.save(article) 
+    console.log('new article is: ', newArticle)
+  }
+
   viewArticle = event => {
     const { articleId } = event.currentTarget.dataset
     const url = `../article/article?id=${articleId}`
@@ -146,16 +169,6 @@ export default class Index extends Component {
       },
       fail () {}
     })
-  }
-
-  toggleMenu = async (event) => {
-    const { menu: activeMenu } = event.currentTarget.dataset
-    this.setState({ activeMenu })
-
-    if (activeMenu === CATEGORIES.ALL) {
-      const { latest, pastArticles } = await fetchAll()
-      this.setState({ latest, pastArticles })
-    }
   }
 
   chooseLocation = async () => {
@@ -228,14 +241,17 @@ export default class Index extends Component {
   }
 
   saveUserInfo = async userData => {
-    console.log('saveUserInfo')
+    console.log('saveUserInfo', userData)
     const response = await DB.save(userData.detail)
     console.log('存储成功: ', response)
   }
 
+  toAdmin = () => {
+    Taro.navigateTo({ url: '../admin/admin' })
+  }
+
   render () {
     const {
-      activeMenu,
       location,
       polyline,
       markers,
@@ -244,6 +260,7 @@ export default class Index extends Component {
 
     return (
       <View className='index'>
+        <View className='copyright' onClick={this.toAdmin}>后台管理</View>
         {
           location &&
           <View className='track'>
@@ -253,30 +270,31 @@ export default class Index extends Component {
               latitude='23.159165'
               scale='5'
               show-location
-              markers={this.state.markers}
-              polyline={this.state.polyline}
+              markers={markers}
+              polyline={polyline}
               style='width: 100%; height: 100%;'
             />
           <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
         </View>
         }
 
-        <Button openType='getUserInfo' bindgetuserinfo={this.saveUserInfo}>Test</Button>
+        <View class='index__latest'>Latest</View>
 
         <View className='index__item-list'>
         {
           latest &&
             <View
               className='index__item'
-              key={latest.id}
+              key={latest.objectId}
               hoverClass='index__item--hover'
-              data-article-id={latest.id}
+              data-article-id={latest.objectId}
               onClick={this.viewArticle}
             >
-              <Image className='index__item-image' src={itemImage}></Image>
+            {latest.objectId}
+              <Image className='index__item-image' src={latest.image}></Image>
               <View className='index__item-meta'>
                 <View className='index__item-title'>{latest.title}</View>
-                <View className='index__item-summary'>{latest.summary}</View>
+                <View className='index__item-summary'>{latest.subtitle}</View>
               </View>
             </View>
         }
@@ -284,11 +302,18 @@ export default class Index extends Component {
         {
           this.state.pastArticles.map(item => {
             return (
-              <View className='index__item index__item--simple' key={item.id} hoverClass='index__item--hover'>
+              <View 
+                className='index__item index__item--simple' 
+                key={item.objectId} 
+                hoverClass='index__item--hover'
+                data-article-id={item.objectId}
+                onClick={this.viewArticle}
+              >
+              {item.objectId}
                 <View className='index__item-meta'>
-                  <View className='index__item-title'>{item.title}111</View>
+                  <View className='index__item-title'>{item.title}</View>
                   {/* <View className='index__item-share'><Image src={Share} /> </View> */}
-                  <View className='index__item-summary'>{item.summary}111</View>
+                  <View className='index__item-summary'>{item.subtitle}</View>
                 </View>
               </View>
             )
