@@ -1,11 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Map, Progress, Button, Swiper, SwiperItem } from '@tarojs/components'
+import { View, Image, Map, Progress, Button, Swiper, SwiperItem, ScrollView } from '@tarojs/components'
 import { fetchAll } from '../../services/articleService'
 import { DB } from '../../services/leancloudService'
 import Article from '../../models/Article'
-import itemImage1 from '../../assets/item-image.jpg'
-import test21 from '../../assets/icons/end-2.png'
-import test3 from '../../assets/icons/hidden.png'
 import './index.scss'
 
 export default class Index extends Component {
@@ -274,7 +271,30 @@ export default class Index extends Component {
         }
 
         <View class='index__section index__section--stories'>
-          <View class='index__section-title'>Stories</View>
+          <View class='index__section-title'>Gallery</View>
+          <ScrollView scrollX class='slider'>
+            <View className='slider__item' hoverClass='slider__item--hover'>
+              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+              {/* <View className='slider__title'>Hello World.</View> */}
+            </View>
+            <View className='slider__item' hoverClass='slider__item--hover'>
+              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+              {/* <View className='slider__title'>Hello World.</View> */}
+            </View>
+            <View className='slider__item' hoverClass='slider__item--hover'>
+              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+              {/* <View className='slider__title'>Hello World.</View> */}
+            </View>
+            <View className='slider__item' hoverClass='slider__item--hover'>
+              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+              {/* <View className='slider__title'>Hello World.</View> */}
+            </View>
+            <View className='slider__item' hoverClass='slider__item--hover'>
+              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+              {/* <View className='slider__title'>Hello World.</View> */}
+            </View>
+          </ScrollView>
+          {/* 
           <Swiper class='slider'>
             <Swiper-Item class='slider__item'>
               <Image class='slider__image' src={itemImage1} />
@@ -290,7 +310,7 @@ export default class Index extends Component {
                 <View>hhhhhhh</View>
               </View>
             </Swiper-Item>
-          </Swiper>
+          </Swiper> */}
         </View>
 
         <View class='index__section index__section--timeline'>
@@ -314,7 +334,7 @@ export default class Index extends Component {
                 <View>2018-07-01</View>
                 <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
                 <View>
-                  <Image src={itemImage1}/>
+                  <Image src={itemImage1} />
                 </View>
                 <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
               </View>

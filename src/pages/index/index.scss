@@ -3,121 +3,22 @@
   padding: 0;
 
   &__section {
+    padding: 0 40px;
     margin-top: 40px;
 
     &-title {
       font-size: 24PX;
       color: #000;
       font-weight: bold;
-      margin-left: 40px;
       margin-bottom: 20px;
-      text-shadow: 0 0 2px #bbb;
+      text-shadow: 0 0 2px #eee;
     }
   }
-
-  // &__menu {
-  //   font-size: 30PX;
-  //   color: ccc;
-  //   position: fixed;
-  //   top: 0;
-  //   width: 100%;
-  //   background-color: #fff;
-  //   z-index: 99;
-  //   height: 110px;
-  //   padding: 0 40px;
-
-  //   &-item {
-  //     margin-right: 40px;
-  //     display: inline-block;
-  //     transition: all .3s ease;
-
-  //     &--active {
-  //       color: #000;
-  //       border-bottom: 1px solid #000;
-  //     }
-  //   }
-  // }
-
-  // &__list {
-  //   padding: 0 40px;
-
-  //   &__item {
-  //     overflow: hidden;
-  //     border-radius: 3PX;
-  //     position: relative;
-  //     margin-bottom: 50px;
-  //     transition: transform .2s linear;
-  //     box-shadow: 0 8px 15px rgb(226, 226, 226);
-
-  //     &--hover {
-  //       transform: translateY(-5PX);
-  //       box-shadow: 0 16px 30px rgb(190, 189, 189);
-  //     }
-
-  //     &--simple {
-  //       box-shadow: none;
-  //     }
-
-  //     &-share {
-  //       position: absolute;
-  //       right: 20px;
-  //       top: 10px;
-  //       width: 24PX;
-  //       height: 24PX;
-  //       display: none;
-  //     }
-
-  //     &-image {
-  //       width: 100%;
-  //       height: 450px;
-  //     }
-
-  //     &-meta {
-  //       position: relative;
-  //       padding: 20px 0;
-  //       margin: 20px 0 20px 20px;
-  //     }
-
-  //     &-like,
-  //     &-star,
-  //     &-share,
-  //     &-title {
-  //       display: inline-block;
-  //     }
-
-  //     &-title {
-  //       font-size: 18PX;
-  //       overflow: hidden;
-  //       width: 90%;
-  //       white-space: nowrap;
-  //       text-overflow: ellipsis;
-  //     }
-
-  //     &-summary {
-  //       color: #666;
-  //       margin: 16px 0;
-  //       font-size: 12PX;
-  //     }
-
-  //     &-like,
-  //     &-star {
-  //       float: right;
-  //       margin: 0 10px;
-  //     }
-
-  //     &-date {
-  //       margin: 20px 0 50px 0;
-  //       text-align: center;
-  //       font-size: 12PX;
-  //       color: rgb(179, 179, 179);
-  //     }
-  //   }
-  // }
 }
 
 .track {
   height: 230PX;
-  box-shadow: 0 5px 25px #ccc;
+  box-shadow: 0 8px 25px #ccc;
 
   &-cover__current {
     background-color: #fff;
@@ -128,32 +29,45 @@
   }
 }
 
-
 .slider {
-  margin: 0 40px;
-  height: 300PX;
-  box-shadow: 0 5px 25px #ccc;
-  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 
   &__item {
+    position: relative;
     background-color: #fff;
-    border-radius: 2PX;
-    box-shadow: 0 2px 20px #ccc;
+    display: inline-block;
+    width: 88%;
+    border-radius: 3PX;
+    overflow: hidden;
+    margin-right: 40px;
+    border: 1px solid #eee;
+    height: 190PX;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__title {
+    height: 40PX;
+    line-height: 40PX;
+    padding-left: 10PX;
+    // color: #333;
+    // position: absolute;
+    // bottom: 0;
+    // left: 0;
+    // width: 100%;
+    // background: #fff;
   }
 
   &__image {
-    display: block;
     width: 100%;
-  }
-
-  &__item-meta {
-    height: 40PX;
+    height: 190PX;
   }
 }
 
 .timeline {
-  margin: 0 40px;
-
   &__item {
     position: relative;
     padding: 0 0 12PX;
@@ -178,7 +92,7 @@
       padding: 0 24PX 10PX ;
 
       image {
-        border-radius: 4PX;
+        border-radius: 3PX;
       }
     }
   }
