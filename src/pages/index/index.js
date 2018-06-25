@@ -1,14 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Map, Progress, Button } from '@tarojs/components'
-import { CATEGORIES } from '../../CONSTANT'
+import { View, Image, Map, Progress, Button, Swiper, SwiperItem } from '@tarojs/components'
 import { fetchAll } from '../../services/articleService'
-import { DB, Query } from '../../services/leancloudService'
-import AV from '../../libs/av-weapp'
+import { DB } from '../../services/leancloudService'
 import Article from '../../models/Article'
-import Comment from '../../models/Comment'
-import Tag from '../../models/Tag'
-import itemImage from '../../assets/item-image.jpg'
-import hidden from '../../assets/icons/hidden.png'
+import itemImage1 from '../../assets/item-image.jpg'
+import test21 from '../../assets/icons/end-2.png'
+import test3 from '../../assets/icons/hidden.png'
 import './index.scss'
 
 export default class Index extends Component {
@@ -21,7 +18,6 @@ export default class Index extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      activeMenu: CATEGORIES.RECENT,
       latest: null,
       pastArticles: [],
       location: null,
@@ -116,22 +112,22 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
-  onReachBottom () {
-    Taro.showLoading({
-      mask: true,
-      title: 'loading...',
-    })
+  // onReachBottom () {
+  //   Taro.showLoading({
+  //     mask: true,
+  //     title: 'loading...',
+  //   })
 
-    Taro.showNavigationBarLoading()
-    setTimeout(() => {
-      const items = this.state.pastArticles.slice(0)
-      this.setState({
-        pastArticles: [ ...items, ...this.state.pastArticles ]
-      })
-      Taro.hideLoading()
-      Taro.hideNavigationBarLoading()
-    }, 2000)
-  }
+  //   Taro.showNavigationBarLoading()
+  //   setTimeout(() => {
+  //     const items = this.state.pastArticles.slice(0)
+  //     this.setState({
+  //       pastArticles: [ ...items, ...this.state.pastArticles ]
+  //     })
+  //     Taro.hideLoading()
+  //     Taro.hideNavigationBarLoading()
+  //   }, 2000)
+  // }
 
   saveArticle = async () => {
     const article = new Article({
@@ -140,16 +136,15 @@ export default class Index extends Component {
       content: `
       <h1>Amet ullamco duis exercitation fugiat sint sunt incididunt id excepteur aliquip.</h1>
       <p>
-        Quis excepteur consequat sint sunt. 
-        Commodo cupidatat ea laboris reprehenderit minim in et Lorem aute proident laboris exercitation. 
+        Quis excepteur consequat sint sunt.
+        Commodo cupidatat ea laboris reprehenderit minim in et Lorem aute proident laboris exercitation.
         Ex dolore ullamco enim officia sint esse adipisicing sunt quis eu qui excepteur officia.
         Minim incididunt enim officia consectetur elit ipsum irure aute fugiat qui.
       </p>`,
       subtitle: 'Ea dolore exercitation aliqua anim fugiat est laboris fugiat elit id culpa in.',
     })
 
-    const newArticle = await article.save(article) 
-    console.log('new article is: ', newArticle)
+    const newArticle = await article.save(article)
   }
 
   viewArticle = event => {
@@ -257,68 +252,74 @@ export default class Index extends Component {
       markers,
       latest
     } = this.state
+    const name = 'item-image'
 
     return (
       <View className='index'>
-        <View className='copyright' onClick={this.toAdmin}>后台管理</View>
         {
           location &&
           <View className='track'>
-            <Map
-              id='map'
-              longitude='113.517988'
-              latitude='23.159165'
-              scale='5'
-              show-location
-              markers={markers}
-              polyline={polyline}
-              style='width: 100%; height: 100%;'
-            />
-          <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
-        </View>
+              <Map
+                id='map'
+                longitude='113.517988'
+                latitude='23.159165'
+                scale='5'
+                show-location
+                markers={markers}
+                polyline={polyline}
+                style='width: 100%; height: 100%;'
+              />
+            <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
+          </View>
         }
 
-        <View class='index__latest'>Latest</View>
+        <View class='index__section index__section--stories'>
+          <View class='index__section-title'>Stories</View>
+          <Swiper class='slider'>
+            <Swiper-Item class='slider__item'>
+              <Image class='slider__image' src={itemImage1} />
+              <View class='slider__item-meta'>
+                <View>xxxxxx</View>
+                <View>yyyyyy</View>
+              </View>
+            </Swiper-Item>
+            <Swiper-Item class='slider__item'>
+              <Image class='slider__image' src={itemImage1} />
+              <View class='slider__item-meta'>
+                <View>zzzzzz</View>
+                <View>hhhhhhh</View>
+              </View>
+            </Swiper-Item>
+          </Swiper>
+        </View>
 
-        <View className='index__item-list'>
-        {
-          latest &&
-            <View
-              className='index__item'
-              key={latest.objectId}
-              hoverClass='index__item--hover'
-              data-article-id={latest.objectId}
-              onClick={this.viewArticle}
-            >
-            {latest.objectId}
-              <Image className='index__item-image' src={latest.image}></Image>
-              <View className='index__item-meta'>
-                <View className='index__item-title'>{latest.title}</View>
-                <View className='index__item-summary'>{latest.subtitle}</View>
+        <View class='index__section index__section--timeline'>
+          <View class='index__section-title'>Timeline</View>
+          <View class='timeline'>
+            <View class='timeline__item'>
+              <View class='timeline__item-tail'></View>
+              <View class='timeline__item-head'></View>
+              <View class='timeline__item-content'>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
               </View>
             </View>
-        }
-        <View className='index__more'>View more from below</View>
-        {
-          this.state.pastArticles.map(item => {
-            return (
-              <View 
-                className='index__item index__item--simple' 
-                key={item.objectId} 
-                hoverClass='index__item--hover'
-                data-article-id={item.objectId}
-                onClick={this.viewArticle}
-              >
-              {item.objectId}
-                <View className='index__item-meta'>
-                  <View className='index__item-title'>{item.title}</View>
-                  {/* <View className='index__item-share'><Image src={Share} /> </View> */}
-                  <View className='index__item-summary'>{item.subtitle}</View>
+
+            <View class='timeline__item'>
+              {/* <View class='timeline__item-tail'></View> */}
+              <View class='timeline__item-head'></View>
+              <View class='timeline__item-content'>
+                <View>2018-07-01</View>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
+                <View>
+                  <Image src={itemImage1}/>
                 </View>
+                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
               </View>
-            )
-          })
-        }
+            </View>
+          </View>
         </View>
         <View className='copyright'>created by bushuai-lab.cn</View>
       </View>

@@ -50,13 +50,13 @@ export default class Index extends Component {
         {
           article && (
             <View className='article-inner'>
-              <Image 
+              <Image
                 className='article__image'
                 mode='widthFix'
-                src={article.image} 
+                src={article.image}
               />
               <View className='article__content'>
-                <RichText nodes={article.content}></RichText>
+                <RichText nodes={article.content} />
               </View>
               {/* <View className='article__footer' onClick={this.likeArticle}>
                   { likeSection }

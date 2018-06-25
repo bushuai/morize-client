@@ -15,8 +15,8 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'MORIZE',
-      navigationBarTextStyle: 'black',
-      onReachBottomDistance: 0
+      navigationBarTextStyle: 'black'
+      // onReachBottomDistance: 0
     }
   }
 
