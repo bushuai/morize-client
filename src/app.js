@@ -1,6 +1,7 @@
 import '@tarojs/async-await'
 import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index/index'
+import { get as getGlobalData } from './services/bus'
 import './app.scss'
 
 class App extends Component {
@@ -9,7 +10,8 @@ class App extends Component {
       'pages/index/index',
       'pages/article/article',
       'pages/about/about',
-      'pages/admin/admin'
+      'pages/admin/admin',
+      'pages/login/login'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -20,7 +22,13 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    const url = getGlobalData('userData')
+      ? '/pages/index/index'
+      : '/pages/login/login'
+
+    Taro.navigateTo({ url })
+  }
 
   componentDidShow () {}
 
