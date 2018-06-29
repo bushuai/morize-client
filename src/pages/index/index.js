@@ -1,9 +1,12 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Map, Progress, Button, Swiper, SwiperItem, ScrollView } from '@tarojs/components'
+import { View, Image, Map, Progress, ScrollView } from '@tarojs/components'
 import { fetchAll } from '../../services/articleService'
 import { DB } from '../../services/leancloudService'
 import Article from '../../models/Article'
 import './index.scss'
+import end from '../../assets/icons/end.png'
+import hidden from '../../assets/icons/hidden.png'
+import itemImage1 from '../../assets/item-image.jpg'
 
 export default class Index extends Component {
   config = {
@@ -16,7 +19,6 @@ export default class Index extends Component {
     super(props)
     this.state = {
       latest: null,
-      pastArticles: [],
       location: null,
       polyline: [{
         points: [
@@ -51,10 +53,40 @@ export default class Index extends Component {
           { longitude: 120.391308, latitude: 36.081845 },
           { longitude: 120.391308, latitude: 36.081845 },
           { longitude: 120.391308, latitude: 36.081845 }
-
         ],
         color: "#2a91e0",
-        width: 4,
+        width: 2,
+        dottedLine: false,
+        arrowLine: false,
+        borderWidth:5
+      },
+      {
+        points: [
+          { longitude: 113.503147, latitude: 23.161879 },
+          { longitude: 113.75151, latitude: 23.031035 },
+          { longitude: 114.060815, latitude: 22.552317 },
+          { longitude: 114.348273, latitude: 22.712434 },
+          { longitude: 114.427611, latitude: 23.105515 },
+          { longitude: 115.649881, latitude: 22.921369 },
+          { longitude: 116.693928, latitude: 23.358432 },
+          { longitude: 116.618039, latitude: 23.66595 },
+          { longitude: 117.659786, latitude: 24.514678 },
+          { longitude: 118.131217, latitude: 24.495739 },
+          { longitude: 118.675087, latitude: 24.880786 },
+          { longitude: 119.016587, latitude: 25.441727 },
+          { longitude: 119.310944, latitude: 26.073796 },
+          { longitude: 119.551258, latitude: 26.673513 },
+          { longitude: 120.718337, latitude: 27.992328 },
+          { longitude: 121.438131, latitude: 28.655743 },
+          { longitude: 121.428932, latitude: 28.651686 },
+          { longitude: 121.617505, latitude: 29.8697 },
+          { longitude: 120.584956, latitude: 30.043928 },
+          { longitude: 120.22161, latitude: 30.261778 },
+          { longitude: 121.472149, latitude: 31.238279 },
+          { longitude: 120.589079, latitude: 31.30544 }
+        ],
+        color: "#ff0000",
+        width: 2,
         dottedLine: false,
         arrowLine: false,
         borderWidth:5
@@ -73,21 +105,12 @@ export default class Index extends Component {
         latitude: 36.081845,
         width: 18,
         height: 18,
-        iconPath: '/assets/icons/end-2.png'
+        iconPath: '/assets/icons/end.png'
       },
       {
         id: 3,
-        longitude: 116.693928,
-        latitude: 23.358432,
-        callout: {
-          content: '我在这里',
-          color:  '#000000',
-          borderRadius: 3,
-          bgColor : '#ffffff',
-          padding:  5,
-          display:  'ALWAYS',
-          textAlign: 'center'
-        }
+        longitude: 120.589079, 
+        latitude: 31.30544
       }
     ]
     }
@@ -99,8 +122,27 @@ export default class Index extends Component {
     this.mapCtx = Taro.createMapContext('map', this)
     const actions = [ Taro.getLocation(), fetchAll() ]
     const [ location, articles ] = await Promise.all(actions)
-    const { pastArticles, latest } = articles
-    this.setState({ location, pastArticles, latest })
+    const { latest } = articles
+    const linePoints = [ 
+      { ...location }, 
+      { longitude: 120.589079, latitude: 31.30544 }
+    ]
+
+    const linePolyline = {
+      points: linePoints,
+      color: "#cccccc",
+      width: 2,
+      dottedLine: true,
+      arrowLine: false,
+      borderWidth: 5
+    }
+
+    const allLines = [
+      ...this.state.polyline,
+      linePolyline
+    ]
+
+    this.setState({ location, polyline: allLines, latest })
   }
 
   componentWillUnmount () { }
