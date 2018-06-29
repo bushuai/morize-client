@@ -12,7 +12,8 @@ export default class Index extends Component {
   config = {
     navigationBarTitleText: 'MORIZE',
     // enablePullDownRefresh: true,
-    backgroundTextStyle: 'dark'
+    backgroundTextStyle: 'dark',
+    disableScroll: false
   }
 
   constructor (props) {
@@ -109,22 +110,31 @@ export default class Index extends Component {
       },
       {
         id: 3,
-        longitude: 120.589079, 
+        longitude: 120.589079,
         latitude: 31.30544
-      }
-    ]
+      }],
+
+      gallery: [
+        { title: '111', image: itemImage1 },
+        { title: '222', image: itemImage1 },
+        { title: '333', image: itemImage1 }
+      ]
     }
   }
 
   componentWillMount () { }
 
   async componentDidMount () {
+    // const loginResponse = await Taro.login()
+    // const userResponse = await Taro.getUserInfo()
+    // console.log(loginResponse, userResponse)
+
     this.mapCtx = Taro.createMapContext('map', this)
     const actions = [ Taro.getLocation(), fetchAll() ]
     const [ location, articles ] = await Promise.all(actions)
     const { latest } = articles
-    const linePoints = [ 
-      { ...location }, 
+    const linePoints = [
+      { ...location },
       { longitude: 120.589079, latitude: 31.30544 }
     ]
 
@@ -150,23 +160,6 @@ export default class Index extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
-
-  // onReachBottom () {
-  //   Taro.showLoading({
-  //     mask: true,
-  //     title: 'loading...',
-  //   })
-
-  //   Taro.showNavigationBarLoading()
-  //   setTimeout(() => {
-  //     const items = this.state.pastArticles.slice(0)
-  //     this.setState({
-  //       pastArticles: [ ...items, ...this.state.pastArticles ]
-  //     })
-  //     Taro.hideLoading()
-  //     Taro.hideNavigationBarLoading()
-  //   }, 2000)
-  // }
 
   saveArticle = async () => {
     const article = new Article({
@@ -284,12 +277,37 @@ export default class Index extends Component {
     Taro.navigateTo({ url: '../admin/admin' })
   }
 
+  handleScrollToLower = () => {
+    const { gallery } = this.state
+
+    if (gallery.length >= 9) {
+      return Taro.showToast({
+        title: '等待发现更多美好',
+        icon: 'none'
+      })
+    }
+
+    Taro.showLoading({
+      title: 'loading'
+    })
+
+    const images = gallery.slice(0)
+
+    setTimeout(() => {
+      this.setState({
+        gallery: [ ...images, ...gallery ]
+      })
+      Taro.hideLoading()
+    }, 1000)
+  }
+
   render () {
     const {
       location,
       polyline,
       markers,
-      latest
+      latest,
+      gallery
     } = this.state
     const name = 'item-image'
 
@@ -314,29 +332,20 @@ export default class Index extends Component {
 
         <View class='index__section index__section--stories'>
           <View class='index__section-title'>Gallery</View>
-          <ScrollView scrollX class='slider'>
-            <View className='slider__item' hoverClass='slider__item--hover'>
-              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-              {/* <View className='slider__title'>Hello World.</View> */}
-            </View>
-            <View className='slider__item' hoverClass='slider__item--hover'>
-              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-              {/* <View className='slider__title'>Hello World.</View> */}
-            </View>
-            <View className='slider__item' hoverClass='slider__item--hover'>
-              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-              {/* <View className='slider__title'>Hello World.</View> */}
-            </View>
-            <View className='slider__item' hoverClass='slider__item--hover'>
-              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-              {/* <View className='slider__title'>Hello World.</View> */}
-            </View>
-            <View className='slider__item' hoverClass='slider__item--hover'>
-              <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-              {/* <View className='slider__title'>Hello World.</View> */}
-            </View>
+          <ScrollView scrollX class='slider' onScrolltolower={this.handleScrollToLower} scrollWithAnimation>
+          {
+            gallery.map(galleryItem => {
+              return (
+                <View key={galleryItem.title} className='slider__item' hoverClass='slider__item--hover'>
+                  <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+                  {/* <View className='slider__title'>Hello World.</View> */}
+                </View>
+              )
+            })
+          }
+
           </ScrollView>
-          {/* 
+          {/*
           <Swiper class='slider'>
             <Swiper-Item class='slider__item'>
               <Image class='slider__image' src={itemImage1} />

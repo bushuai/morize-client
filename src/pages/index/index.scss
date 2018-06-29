@@ -36,8 +36,8 @@
   &__item {
     position: relative;
     background-color: #fff;
-    display: inline-block;
     width: 88%;
+    display: inline-block;
     border-radius: 3PX;
     overflow: hidden;
     margin-right: 40px;
@@ -53,12 +53,6 @@
     height: 40PX;
     line-height: 40PX;
     padding-left: 10PX;
-    // color: #333;
-    // position: absolute;
-    // bottom: 0;
-    // left: 0;
-    // width: 100%;
-    // background: #fff;
   }
 
   &__image {
