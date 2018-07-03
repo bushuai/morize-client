@@ -25,6 +25,14 @@ export default class Article extends AV.Object {
     return this.get('tags')
   }
 
+  set type (value) {
+    this.set('type', value)
+  }
+  
+  get type () {
+    return this.get('type')
+  }
+
   set content (value) {
     this.set('content', value)
   }

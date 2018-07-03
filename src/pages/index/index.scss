@@ -80,39 +80,6 @@
   }
 }
 
-.timeline {
-  &__item {
-    position: relative;
-    padding: 0 0 12PX;
-
-    &-tail {
-      border-left: 1px solid #e9eaec;
-      height: 100%;
-      left: 7PX;
-      top: 3PX;
-      position: absolute;
-    }
-
-    &-head {
-      width: 12PX;
-      height: 12PX;
-      background-color: #fff;
-      border-radius: 50%;
-      border: 1px solid #2d8cf0;
-      position: absolute;
-      top: 3PX;
-    }
-
-    &-content {
-      padding: 0 24PX 10PX ;
-
-      image {
-        border-radius: 3PX;
-      }
-    }
-  }
-}
-
 .copyright {
   text-align: center;
   font-size: 10PX;

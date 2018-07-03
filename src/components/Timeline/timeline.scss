@@ -1,0 +1,66 @@
+.timeline-item {
+  position: relative;
+  padding: 0 0 12PX;
+
+  &:last-child {
+    .timeline-item__tail {
+      display: none;
+    }
+  }
+
+  &__tail {
+    border-left: 1px solid #e9eaec;
+    height: 100%;
+    left: 5PX;
+    top: 4PX;
+    position: absolute;
+  }
+
+  &__date {
+    font-size: 12PX;
+    color: #666;
+  }
+
+  &__circle {
+    width: 9PX;
+    height: 9PX;
+    top: 4PX;
+    background-color: #fff;
+    border-radius: 50%;
+    border: 1px solid #2d8cf0;
+    position: absolute;
+  }
+
+  &__body {
+    padding: 0 0 10PX 16PX;
+
+    image {
+      border-radius: 3PX;
+    }
+  }
+  
+  &__meta {
+    font-size: 12PX;
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  &__title {
+    margin-bottom: 10PX;
+  }
+
+  &__media {
+    margin-bottom: 10PX;
+  }
+
+  &__media-title {
+    display: block;
+    font-size: 12PX;
+    text-align: center;
+    color: #555;
+  }
+}

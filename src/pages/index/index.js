@@ -12,6 +12,7 @@ import './index.scss'
 import end from '../../assets/icons/end.png'
 import hidden from '../../assets/icons/hidden.png'
 import itemImage1 from '../../assets/item-image.jpg'
+import Timeline from '../../components/Timeline/Timeline'
 
 export default class Index extends Component {
   config = {
@@ -24,6 +25,47 @@ export default class Index extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      timelines: [
+        { 
+          title: '东莞一夜',
+          date: '2019-01-01',
+          src: '/assets/item-image.jpg',
+          images: [
+            {
+              title: '广场舞',
+              src: '/assets/item-image.jpg'
+            },
+            {
+              title: '小女孩',
+              src: '/assets/item-image.jpg'
+            }
+          ],
+          type: 'IMG',
+          remark: 'remark',
+          content: 'xxx',
+          location: 'Dong Guan',
+          subtitle: '' 
+        },
+        { 
+          title: 'title',
+          date: '2019-02-01',
+          videos: [
+            {
+              title: '1111',
+              src: 'http://www.w3school.com.cn//i/movie.mp4'
+            },
+            {
+              title: '222',
+              src: 'http://www.w3school.com.cn//i/movie.mp4'
+            }
+          ],
+          type: 'VIDEO',
+          remark: 'remark',
+          content: 'xxx',
+          location: 'Shan Tou',
+          subtitle: '重游南澳岛' 
+        }
+      ],
       latest: null,
       location: null,
       polyline: [],
@@ -220,7 +262,8 @@ export default class Index extends Component {
       polyline,
       markers,
       latest,
-      gallery
+      gallery,
+      timelines
     } = this.state
     const name = 'item-image'
 
@@ -264,67 +307,15 @@ export default class Index extends Component {
               )
             })
           }
-
           </ScrollView>
-          {/*
-          <Swiper class='slider'>
-            <Swiper-Item class='slider__item'>
-              <Image class='slider__image' src={itemImage1} />
-              <View class='slider__item-meta'>
-                <View>xxxxxx</View>
-                <View>yyyyyy</View>
-              </View>
-            </Swiper-Item>
-            <Swiper-Item class='slider__item'>
-              <Image class='slider__image' src={itemImage1} />
-              <View class='slider__item-meta'>
-                <View>zzzzzz</View>
-                <View>hhhhhhh</View>
-              </View>
-            </Swiper-Item>
-          </Swiper> */}
         </View>
 
         <View class='index__section index__section--timeline'>
           <View class='index__section-title'>Timeline</View>
           <View class='timeline'>
-            <View class='timeline__item'>
-              <View class='timeline__item-tail'></View>
-              <View class='timeline__item-head'></View>
-              <View class='timeline__item-content'>
-                <View>2018-07-02</View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-              </View>
-            </View>
-
-            <View class='timeline__item'>
-              {/* <View class='timeline__item-tail'></View> */}
-              <View class='timeline__item-tail'></View>
-              <View class='timeline__item-head'></View>
-              <View class='timeline__item-content'>
-                <View>2018-07-01</View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-                <View>
-                  <Image src={itemImage1} />
-                </View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-              </View>
-            </View>
-
-            <View class='timeline__item'>
-              {/* <View class='timeline__item-tail'></View> */}
-              <View class='timeline__item-head'></View>
-              <View class='timeline__item-content'>
-                <View>2018-07-01</View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-                <View>
-                  <Video src='http://www.w3school.com.cn//i/movie.mp4' />
-                </View>
-                <View>Magna ut elit anim duis enim pariatur id commodo amet esse veniam.</View>
-              </View>
-            </View>
+          {
+            timelines.map(timeline => (<Timeline key={timeline.date} timeline={timeline}/>))
+          }
           </View>
         </View>
         <View className='copyright'>created by bushuai-lab.cn</View>
