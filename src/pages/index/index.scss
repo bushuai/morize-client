@@ -20,12 +20,31 @@
   height: 230PX;
   box-shadow: 0 8px 25px #ccc;
 
-  &-cover__current {
+  &__cover {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__overlay {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: 9;
     background-color: #fff;
-    color: #000;
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
+    opacity: 0.7
+  }
+
+  &__notice {
+    position: relative;
+    z-index: 10;
+    color: #777;
   }
 }
 
@@ -70,6 +89,7 @@
       border-left: 1px solid #e9eaec;
       height: 100%;
       left: 7PX;
+      top: 3PX;
       position: absolute;
     }
 
@@ -80,6 +100,7 @@
       border-radius: 50%;
       border: 1px solid #2d8cf0;
       position: absolute;
+      top: 3PX;
     }
 
     &-content {

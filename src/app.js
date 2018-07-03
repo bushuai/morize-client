@@ -23,11 +23,11 @@ class App extends Component {
   }
 
   componentDidMount () {
-    const url = getGlobalData('userData')
-      ? '/pages/index/index'
-      : '/pages/login/login'
+    // const url = getGlobalData('userData')
+    //   ? '/pages/index/index'
+    //   : '/pages/login/login'
 
-    Taro.navigateTo({ url })
+    // Taro.navigateTo({ url })
   }
 
   componentDidShow () {}
