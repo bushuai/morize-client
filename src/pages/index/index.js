@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Map, Progress, ScrollView, Video, CoverView, Button } from '@tarojs/components'
+import { View, Image, Map, Progress, ScrollView, Video, CoverView, Button, Text } from '@tarojs/components'
 import { fetchAll as fetchAllArticle } from '../../services/articleService'
 import * as routeService from '../../services/routeService'
+import * as timelineService from '../../services/timelineService'
 import {
   get as getGlobalData,
   set as setGlobalData
@@ -19,7 +20,6 @@ import Timeline from '../../components/Timeline/Timeline'
 export default class Index extends Component {
   config = {
     navigationBarTitleText: 'MORIZE',
-    // enablePullDownRefresh: true,
     backgroundTextStyle: 'dark',
     disableScroll: false
   }
@@ -27,52 +27,14 @@ export default class Index extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      timelines: [
-        { 
-          title: '深圳',
-          date: '2019-01-01',
-          src: '/assets/item-image.jpg',
-          images: [
-            {
-              title: '广场舞',
-              src: '/assets/item-image.jpg'
-            },
-            {
-              title: '小女孩',
-              src: '/assets/item-image.jpg'
-            }
-          ],
-          type: 'IMG',
-          remark: 'remark',
-          content: 'xxx',
-          location: 'Dong Guan',
-          subtitle: '' 
-        },
-        { 
-          title: '重游南澳岛',
-          date: '2019-02-01',
-          videos: [
-            {
-              title: '1111',
-              src: 'http://www.w3school.com.cn//i/movie.mp4'
-            },
-            {
-              title: '222',
-              src: 'http://www.w3school.com.cn//i/movie.mp4'
-            }
-          ],
-          type: 'VIDEO',
-          remark: 'remark',
-          content: 'xxx',
-          location: 'Shan Tou'
-        }
-      ],
+      timelines: [],
       latest: null,
       location: null,
       polyline: [],
       markers: [],
-
-      gallery: [
+      cards: [
+        { title: '111', image: itemImage1 },
+        { title: '111', image: itemImage1 },
         { title: '111', image: itemImage1 }
       ]
     }
@@ -90,8 +52,10 @@ export default class Index extends Component {
     }
 
     const articles= await fetchAllArticle()
+    const recentTimeline = await timelineService.fetchRecentTimeline()
+
     const { latest } = articles
-    this.setState({ latest })
+    this.setState({ latest, timelines: recentTimeline })
   }
 
   componentWillUnmount () { }
@@ -200,11 +164,11 @@ export default class Index extends Component {
   // }
 
   handleScrollToLower = () => {
-    const { gallery } = this.state
+    const { cards } = this.state
 
-    if (gallery.length >= 9) {
+    if (cards.length >= 6) {
       return Taro.showToast({
-        title: '▶ 等待发现更多美好',
+        title: '等待发现更多美好',
         icon: 'none'
       })
     }
@@ -213,10 +177,10 @@ export default class Index extends Component {
       title: 'loading'
     })
 
-    const images = gallery.slice(0)
+    const images = cards.slice(0)
 
     setTimeout(() => {
-      this.setState({ gallery: [ ...images, ...gallery ] })
+      this.setState({ cards: [ ...images, ...cards ] })
       Taro.hideLoading()
     }, 1000)
   }
@@ -255,6 +219,10 @@ export default class Index extends Component {
     this.initMap(userPolyline)
   }
 
+  handleClickTimeline = () => {
+    console.log('handle click timeline')
+  }
+
   render () {
     const {
       location,
@@ -268,74 +236,100 @@ export default class Index extends Component {
 
     return (
       <View className='index'>
-        {
-          <View className='track'>
-              <Map
-                id='map'
-                longitude='113.517988'
-                latitude='23.159165'
-                scale='5'
-                show-location
-                markers={markers}
-                polyline={polyline}
-                style='width: 100%; height: 100%;'
-              >
-              {
-                !location && <CoverView className='track__cover'>
-                  <CoverView className='track__overlay'></CoverView>
-                  <CoverView className='track__notice' onClick={this.requestGeoLocation}>
-                    点击查看骑行路线
-                  </CoverView>
+        <View className='track'>
+            <Map
+              id='map'
+              longitude='113.517988'
+              latitude='23.159165'
+              scale='5'
+              show-location
+              markers={markers}
+              polyline={polyline}
+              style='width: 100%; height: 100%;'
+            >
+            {
+              !location && <CoverView className='track__cover'>
+                <CoverView className='track__overlay'></CoverView>
+                <CoverView className='track__notice' onClick={this.requestGeoLocation}>
+                  点击查看骑行路线
                 </CoverView>
-              }
-              </Map>
-            <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
-          </View>
-        }
+              </CoverView>
+            }
+            </Map>
+          <Progress percent={80}  strokeWidth={2} active backgroundColor='#ffffff' activeColor='#008cff' />
+        </View>
 
         <View className='index__section index__section--stories'>
           <View className='index__section-title'>Today</View>
-          {/* <ScrollView scrollX className='slider' onScrolltolower={this.handleScrollToLower} scrollWithAnimation>
-          {
-            gallery.map(galleryItem => {
-              return (
-                <View key={galleryItem.title} className='slider__item' hoverClass='slider__item--hover'>
-                  <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-                  <View className='slider__summary'>
-                    <View className='slider__title'>Hello World.</View>
-                    <View className='slider__likes'><Image style='height: 16px;width: 16px;' src={likeImage}></Image></View>
-                  </View>
-                </View>
-              )
-            })
-          }
-          </ScrollView> */}
-          <View className='slider__item' hoverClass='slider__item--hover'>
-            <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-            <View className='slider__meta'>
-              <View className='slider__title'>Hello World.</View>
-              <View className='slider__likes'>
-                <Image className='slider__user' src={avatar}></Image>
-                <Image className='slider__user' src={avatar}></Image>
-                <Image className='slider__user' src={avatar}></Image>
+          <View className='today__item' hoverClass='today__item--hover'>
+            <Image className='today__image' mode='scaleToFill' src={itemImage1} />
+            <View className='today__meta'>
+              <View className='today__title'>Hello World.</View>
+              <View className='today__likes'>
+                <Image className='today__user' src={avatar}></Image>
+                <Image className='today__user' src={avatar}></Image>
+                <Image className='today__user' src={avatar}></Image>
                 <Text style='margin-left: 5PX;'> 张三等 4 人点赞</Text>
               </View>
             </View>
             <View className='divider'></View>
-            <View className='slider__summary'>
+            <View className='today__summary'>
               Lorem qui velit id magna velit quis in magna officia velit ex consequat sit consectetur.
             </View>
           </View>
         </View>
 
-        <View className='index__section index__section--timeline'>
+        {/* <View className='index__section index__section--cards'>
+          <View className='index__section-title'>Cards</View>
+          <ScrollView scrollX className='cards' onScrolltolower={this.handleScrollToLower} scrollWithAnimation>
+          {
+            cards.map(card => {
+              return (
+                <View key={card.title} className='cards__item' hoverClass='cards__item--hover'>
+                </View>
+              )
+            })
+          }
+          </ScrollView>
+        </View> */}
+
+         <View className='index__section index__section--cards2'>
+          <View className='index__section-title'>Cards</View>
+           <View className='cards2__item' hoverClass='cards__item--hover' style='background: linear-gradient(to right, #3f2b96, #a8c0ff); '>
+              {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
+              <View>青海湖</View>
+              <View className='cards2__item-date'>二〇一三年七月</View>
+            </View>
+
+
+            <View className='cards2__item' hoverClass='cards__item--hover' style='background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);'>
+              {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
+              <View>川藏线</View>
+              <View className='cards2__item-date'>二〇一五年七月</View>
+            </View>
+
+            <View className='cards2__item' hoverClass='cards__item--hover' style='background-image: linear-gradient(to top, #a3bded 0%, #6991c7 100%);'>
+              {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
+              <View>海南岛</View>
+              <View className='cards2__item-date'>二〇一六年十月</View>
+            </View>
+
+            <View style='text-align: center;color: #ccc;'>敬请期待</View>
+        </View>
+
+        {/* <View className='index__section index__section--timeline'>
           <View className='index__section-title'>Timeline</View>
           <View className='timeline'>
           {
-            timelines.map(timeline => (<Timeline key={timeline.date} timeline={timeline}/>))
+            timelines.map(timeline => (
+            <Timeline
+              key={timeline.date}
+              timeline={timeline}
+              handleClickTimeline={this.handleClickTimeline}
+            />))
           }
           </View>
-        </View>
+        </View> */}
         <View className='copyright'>created by bushuai-lab.cn</View>
       </View>
     )
