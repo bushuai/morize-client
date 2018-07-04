@@ -9,7 +9,7 @@
   }
 
   &__tail {
-    border-left: 1px solid #e9eaec;
+    border-left: 1px solid #fff;
     height: 100%;
     left: 5PX;
     top: 4PX;
@@ -32,7 +32,7 @@
   }
 
   &__body {
-    padding: 0 0 10PX 16PX;
+    padding: 0 0 0 16PX;
 
     image {
       border-radius: 3PX;
@@ -41,6 +41,10 @@
   
   &__meta {
     font-size: 12PX;
+  }
+
+  &__date {
+    color: #444;
   }
 
   &__summary {
@@ -53,14 +57,11 @@
     margin-bottom: 10PX;
   }
 
-  &__media {
-    margin-bottom: 10PX;
-  }
-
   &__media-title {
     display: block;
     font-size: 12PX;
-    text-align: center;
+    margin: 10PX 0;
+    // text-align: center;
     color: #555;
   }
 }

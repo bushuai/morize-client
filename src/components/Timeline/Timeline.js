@@ -13,13 +13,13 @@ export default class Timeline extends Component {
         <View className='timeline-item__circle'></View>
         <View className='timeline-item__body'>
           <View className='timeline-item__summary'>
-            <View className='timeline-item__title'>{title}</View>
+            <View className='timeline-item__title'>{date}</View>
             <View className='timeline-item__meta'>
-              <Image src={Time}/> <Text>{date}</Text>
-              <Image src={Location}/> <Text>{location}</Text>
+              <Text className='timeline-item__date'>{title}</Text>
+              {/* <Text>{location}</Text> */}
             </View>
           </View>
-          { subtitle && <View className='timeline-item__subtitle'>{subtitle}</View>}
+          {/* { subtitle && <View className='timeline-item__subtitle'>{subtitle}</View>} */}
           { type === 'IMG' &&  images.map(image => {
               return (
                 <View className='timeline-item__media'>

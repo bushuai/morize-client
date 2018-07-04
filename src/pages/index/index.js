@@ -12,6 +12,8 @@ import './index.scss'
 import end from '../../assets/icons/end.png'
 import hidden from '../../assets/icons/hidden.png'
 import itemImage1 from '../../assets/item-image.jpg'
+import likeImage from '../../assets/icons/heart.svg'
+import avatar from '../../assets/avatar.jpg'
 import Timeline from '../../components/Timeline/Timeline'
 
 export default class Index extends Component {
@@ -27,7 +29,7 @@ export default class Index extends Component {
     this.state = {
       timelines: [
         { 
-          title: '东莞一夜',
+          title: '深圳',
           date: '2019-01-01',
           src: '/assets/item-image.jpg',
           images: [
@@ -47,7 +49,7 @@ export default class Index extends Component {
           subtitle: '' 
         },
         { 
-          title: 'title',
+          title: '重游南澳岛',
           date: '2019-02-01',
           videos: [
             {
@@ -62,8 +64,7 @@ export default class Index extends Component {
           type: 'VIDEO',
           remark: 'remark',
           content: 'xxx',
-          location: 'Shan Tou',
-          subtitle: '重游南澳岛' 
+          location: 'Shan Tou'
         }
       ],
       latest: null,
@@ -72,9 +73,7 @@ export default class Index extends Component {
       markers: [],
 
       gallery: [
-        { title: '111', image: itemImage1 },
-        { title: '222', image: itemImage1 },
-        { title: '333', image: itemImage1 }
+        { title: '111', image: itemImage1 }
       ]
     }
   }
@@ -294,25 +293,44 @@ export default class Index extends Component {
           </View>
         }
 
-        <View class='index__section index__section--stories'>
-          <View class='index__section-title'>Gallery</View>
-          <ScrollView scrollX class='slider' onScrolltolower={this.handleScrollToLower} scrollWithAnimation>
+        <View className='index__section index__section--stories'>
+          <View className='index__section-title'>Today</View>
+          {/* <ScrollView scrollX className='slider' onScrolltolower={this.handleScrollToLower} scrollWithAnimation>
           {
             gallery.map(galleryItem => {
               return (
                 <View key={galleryItem.title} className='slider__item' hoverClass='slider__item--hover'>
                   <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
-                  {/* <View className='slider__title'>Hello World.</View> */}
+                  <View className='slider__summary'>
+                    <View className='slider__title'>Hello World.</View>
+                    <View className='slider__likes'><Image style='height: 16px;width: 16px;' src={likeImage}></Image></View>
+                  </View>
                 </View>
               )
             })
           }
-          </ScrollView>
+          </ScrollView> */}
+          <View className='slider__item' hoverClass='slider__item--hover'>
+            <Image className='slider__image' mode='scaleToFill' src={itemImage1} />
+            <View className='slider__meta'>
+              <View className='slider__title'>Hello World.</View>
+              <View className='slider__likes'>
+                <Image className='slider__user' src={avatar}></Image>
+                <Image className='slider__user' src={avatar}></Image>
+                <Image className='slider__user' src={avatar}></Image>
+                <Text style='margin-left: 5PX;'> 张三等 4 人点赞</Text>
+              </View>
+            </View>
+            <View className='divider'></View>
+            <View className='slider__summary'>
+              Lorem qui velit id magna velit quis in magna officia velit ex consequat sit consectetur.
+            </View>
+          </View>
         </View>
 
-        <View class='index__section index__section--timeline'>
-          <View class='index__section-title'>Timeline</View>
-          <View class='timeline'>
+        <View className='index__section index__section--timeline'>
+          <View className='index__section-title'>Timeline</View>
+          <View className='timeline'>
           {
             timelines.map(timeline => (<Timeline key={timeline.date} timeline={timeline}/>))
           }
