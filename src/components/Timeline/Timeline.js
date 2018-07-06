@@ -8,6 +8,7 @@ export default class Timeline extends Component {
   handleClick = () => {
     this.props.handleClickTimeline()
   }
+
   render () {
     const { src, date, images, videos, title, content, subtitle, location } = this.props.timeline
 

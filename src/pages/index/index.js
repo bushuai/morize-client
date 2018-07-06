@@ -15,7 +15,7 @@ import hidden from '../../assets/icons/hidden.png'
 import itemImage1 from '../../assets/item-image.jpg'
 import likeImage from '../../assets/icons/heart.svg'
 import avatar from '../../assets/avatar.jpg'
-import Timeline from '../../components/Timeline/Timeline'
+// import Timeline from '../../components/timeline/timeline'
 
 export default class Index extends Component {
   config = {
@@ -30,6 +30,7 @@ export default class Index extends Component {
       timelines: [],
       latest: null,
       location: null,
+      cardOpen: false,
       polyline: [],
       markers: [],
       cards: [
@@ -223,6 +224,19 @@ export default class Index extends Component {
     console.log('handle click timeline')
   }
 
+  handleOpenCard = () => {
+    console.log('invoded openCard')
+    // const { cardOpen } = this.state
+    // this.setState({ cardOpen: !cardOpen })
+    Taro.navigateTo({
+      url: '/pages/gallery/gallery'
+    })
+  }
+
+  preventMove = event => {
+    event.preventDefault()
+  }
+
   render () {
     const {
       location,
@@ -230,9 +244,12 @@ export default class Index extends Component {
       markers,
       latest,
       gallery,
-      timelines
+      timelines,
+      cardOpen
     } = this.state
-    const name = 'item-image'
+
+    const overlayClasses = [ 'overlay', cardOpen ? 'overlay--show' : '' ]
+    const overlayBgClasses = [ 'overlay-blur', cardOpen ? 'overlay-blur--show' : '' ]
 
     return (
       <View className='index'>
@@ -295,26 +312,38 @@ export default class Index extends Component {
 
          <View className='index__section index__section--cards2'>
           <View className='index__section-title'>Cards</View>
-           <View className='cards2__item' hoverClass='cards__item--hover' style='background: linear-gradient(to right, #3f2b96, #a8c0ff); '>
+           <View 
+              onClick={this.handleOpenCard}
+              className='cards2__item' 
+              hoverClass='cards__item--hover' 
+              style='background: linear-gradient(to right, #3f2b96, #a8c0ff); '>
               {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
               <View>青海湖</View>
               <View className='cards2__item-date'>二〇一三年七月</View>
             </View>
 
 
-            <View className='cards2__item' hoverClass='cards__item--hover' style='background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);'>
+            <View 
+              onClick={this.handleOpenCard}
+              className='cards2__item' 
+              hoverClass='cards__item--hover' 
+              style='background-image: linear-gradient(to right, #243949 0%, #517fa4 100%);'>
               {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
               <View>川藏线</View>
               <View className='cards2__item-date'>二〇一五年七月</View>
             </View>
 
-            <View className='cards2__item' hoverClass='cards__item--hover' style='background-image: linear-gradient(to top, #a3bded 0%, #6991c7 100%);'>
+            <View 
+              onClick={this.handleOpenCard}
+              className='cards2__item' 
+              hoverClass='cards__item--hover' 
+              style='background-image: linear-gradient(to top, #a3bded 0%, #6991c7 100%);'>
               {/* <Image className='cards__image' mode='aspectFit' src={itemImage1} /> */}
               <View>海南岛</View>
               <View className='cards2__item-date'>二〇一六年十月</View>
             </View>
 
-            <View style='text-align: center;color: #ccc;'>敬请期待</View>
+            {/* <View style='text-align: center;color: #ccc;'>敬请期待</View> */}
         </View>
 
         {/* <View className='index__section index__section--timeline'>
@@ -330,6 +359,14 @@ export default class Index extends Component {
           }
           </View>
         </View> */}
+        <View 
+          className={overlayClasses}>
+          <View>青海湖</View>
+          <View>
+            <Image src={itemImage1} />
+          </View>
+        </View>
+        <View className={overlayBgClasses} onClick={this.handleOpenCard}></View>
         <View className='copyright'>created by bushuai-lab.cn</View>
       </View>
     )

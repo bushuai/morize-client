@@ -17,7 +17,7 @@
 }
 
 .track {
-  height: 230PX;
+  height: 460px;
   box-shadow: 0 8px 25px #ccc;
 
   &__cover {
@@ -160,9 +160,49 @@
   padding: 0 40px;
 }
 
+.overlay {
+  height: 600PX;
+  width: 100%;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  transform: translateY(100%);
+  transition: all .5s ease;
+  background: #fff;
+  padding: 40px;
+  border-top-left-radius: 5PX;
+  border-top-right-radius: 5PX;
+
+  &--show {
+    transform: translateY(-600PX);
+  }
+}
+
+.overlay-blur {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  transition-duration: .3s;
+  transition-delay: .1s;
+  transition-property: all;
+  transition-timing-function: ease;
+  background-color: transparent;
+  opacity: 0;
+
+  &--show {
+    background-color: #ecebeb;
+    z-index: 998;
+    opacity: .3;
+  }
+}
+
 .copyright {
   text-align: center;
   font-size: 10PX;
-  margin: 50px;
+  margin: 20px;
   color: #d3d3d3;
 }
+

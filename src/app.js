@@ -11,13 +11,15 @@ class App extends Component {
       'pages/login/login',
       'pages/article/article',
       'pages/about/about',
-      'pages/admin/admin'
+      'pages/admin/admin',
+      'pages/gallery/gallery'
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: 'MORIZE',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      navigationStyle: 'default'
       // onReachBottomDistance: 0
     }
   }

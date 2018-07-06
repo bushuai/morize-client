@@ -7,7 +7,7 @@ import Heart from '../../assets/icons/heart.svg'
 import HeartFill from '../../assets/icons/heart-fill.svg'
 import './article.scss'
 
-export default class Index extends Component {
+export default class Gallery extends Component {
   constructor (props) {
     super(props)
     this.state = {

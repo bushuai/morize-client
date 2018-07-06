@@ -14,12 +14,12 @@
 	"author": "",
 	"license": "MIT",
 	"dependencies": {
-		"@tarojs/async-await": "0.0.64",
-		"@tarojs/components": "0.0.64",
-		"@tarojs/router": "0.0.64",
-		"@tarojs/taro": "0.0.64",
-		"@tarojs/taro-h5": "0.0.64",
-		"@tarojs/taro-weapp": "0.0.64",
+		"@tarojs/async-await": "0.0.67",
+		"@tarojs/components": "0.0.67",
+		"@tarojs/router": "0.0.67",
+		"@tarojs/taro": "0.0.67",
+		"@tarojs/taro-h5": "0.0.67",
+		"@tarojs/taro-weapp": "0.0.67",
 		"bufferutil": "^3.0.5",
 		"leancloud-realtime": "^4.0.1",
 		"leancloud-storage": "^3.7.3",
@@ -27,21 +27,21 @@
 		"utf-8-validate": "^4.0.2"
 	},
 	"devDependencies": {
-		"@tarojs/cli": "0.0.64",
-		"@tarojs/plugin-babel": "0.0.64",
-		"@tarojs/plugin-csso": "0.0.64",
-		"@tarojs/plugin-sass": "0.0.64",
-		"@tarojs/plugin-uglifyjs": "0.0.64",
-		"@tarojs/webpack-runner": "0.0.64",
+		"@tarojs/cli": "0.0.67",
+		"@tarojs/plugin-babel": "0.0.67",
+		"@tarojs/plugin-csso": "0.0.67",
+		"@tarojs/plugin-sass": "0.0.67",
+		"@tarojs/plugin-uglifyjs": "0.0.67",
+		"@tarojs/webpack-runner": "0.0.67",
 		"babel-plugin-transform-class-properties": "^6.24.1",
 		"babel-plugin-transform-decorators-legacy": "^1.3.4",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
 		"babel-eslint": "^8.2.3",
 		"eslint": "^4.19.1",
-		"eslint-config-taro": "0.0.64",
+		"eslint-config-taro": "0.0.67",
 		"eslint-plugin-react": "^7.8.2",
 		"eslint-plugin-import": "^2.12.0",
-		"eslint-plugin-taro": "0.0.64"
+		"eslint-plugin-taro": "0.0.67"
 	}
 }
